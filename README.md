@@ -16,11 +16,15 @@ SurveyForge is designed for researchers writing technical literature reviews. Th
 
 SurveyForge 面向技术综述写作，把文献调研拆成可检查、可断点续跑的流水线。每个关键判断由 LLM 完成，本地脚本只负责稳定可重复的工程任务。
 
-## Current Version / 当前版本
+## Release Version / 发行版本
 
-`v2/` is the formal 1.0 implementation.
+Current release: `SurveyForge v1.0`.
 
-当前正式版本是 `v2/`。旧版调试文件不会作为发布内容提交。
+当前发行版本是 `SurveyForge v1.0`。
+
+Note: the executable source code currently lives under `v2/` because this was the development directory used before the 1.0 release. In this repository, `v2/` is a code directory name, not the release version number.
+
+说明：当前可执行源码仍位于 `v2/` 目录，这是 1.0 发布前的开发目录名。在本仓库中，`v2/` 只是代码目录路径，不代表发行版本号。
 
 ## Repository Layout / 仓库结构
 
