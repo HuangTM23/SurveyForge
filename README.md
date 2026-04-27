@@ -2,6 +2,8 @@
 
 基于多 LLM 协作的文献检索、筛选、阅读与综述生成系统。
 
+[中文说明 / Chinese README](README_CN.md)
+
 SurveyForge is a file-based AI literature survey agent. It starts from a natural-language research topic, plans broad scholarly search queries, retrieves candidate papers, enriches metadata, performs multi-LLM screening and classification, manages PDF download tasks, and produces structured reading cards, category summaries, a global survey summary, and CSV tables for review writing.
 
 ## Project Goal / 项目目标
