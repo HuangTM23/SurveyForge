@@ -1,6 +1,6 @@
 # SurveyForge release repository
 #
-# This repository publishes the V2 implementation as the formal 1.0 version.
+# This repository publishes SurveyForge v1.0.
 # Legacy root-level V1/debug files are intentionally ignored.
 
 *
@@ -12,12 +12,12 @@
 !requirements.txt
 !.env.example
 
-!v2/
-!v2/**
+!surveyforge/
+!surveyforge/**
 
 # Secrets
 .env
-v2/.env
+surveyforge/.env
 
 # Runtime outputs
 data/
@@ -25,9 +25,9 @@ logs/
 temp/
 final/
 papers/
-v2/temp/
-v2/final/
-v2/papers/
+surveyforge/temp/
+surveyforge/final/
+surveyforge/papers/
 
 # Python caches
 __pycache__/

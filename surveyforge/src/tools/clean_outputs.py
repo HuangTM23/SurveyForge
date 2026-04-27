@@ -12,8 +12,8 @@ def remove_path(path: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Clean generated V2 files for a fresh topic run.")
-    parser.add_argument("--include-papers", action="store_true", help="Also remove downloaded PDFs under v2/papers.")
+    parser = argparse.ArgumentParser(description="Clean generated SurveyForge files for a fresh topic run.")
+    parser.add_argument("--include-papers", action="store_true", help="Also remove downloaded PDFs under surveyforge/papers.")
     args = parser.parse_args()
 
     targets = [ROOT / "temp", ROOT / "final"]

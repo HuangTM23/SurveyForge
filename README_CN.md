@@ -19,7 +19,6 @@ SurveyForge 适合用于高质量学术综述或技术调研，核心思想是�
 SurveyForge v1.0
 ```
 
-说明：当前可执行源码仍位于 `v2/` 目录，这是 1.0 发布前的开发目录名。在本仓库中，`v2/` 只是代码目录路径，不代表发行版本号。
 
 ## 2. 项目结构
 
@@ -29,7 +28,7 @@ SurveyForge v1.0
 ├── README_CN.md
 ├── requirements.txt
 ├── LICENSE
-└── v2/
+└── surveyforge/
     ├── cli.py
     ├── .env.example
     ├── configs/
@@ -54,10 +53,10 @@ SurveyForge v1.0
 运行产物默认不提交到 Git：
 
 ```text
-v2/temp/      中间文件
-v2/final/     最终结果
-v2/papers/    自动或手动下载的 PDF
-v2/.env       本地 API key
+surveyforge/temp/      中间文件
+surveyforge/final/     最终结果
+surveyforge/papers/    自动或手动下载的 PDF
+surveyforge/.env       本地 API key
 ```
 
 ## 3. 安装
@@ -79,8 +78,8 @@ sudo apt-get install poppler-utils
 
 支持的 provider：
 
-- `chatgpt`：智能 provider。如果 `v2/.env` 中存在 `OPENAI_API_KEY`，优先走 OpenAI API；否则回退到已登录的 Codex CLI。
-- `gemini`：智能 provider。如果 `v2/.env` 中存在 `GEMINI_API_KEY`，优先走 Gemini API；否则回退到已登录的 Gemini CLI。
+- `chatgpt`：智能 provider。如果 `surveyforge/.env` 中存在 `OPENAI_API_KEY`，优先走 OpenAI API；否则回退到已登录的 Codex CLI。
+- `gemini`：智能 provider。如果 `surveyforge/.env` 中存在 `GEMINI_API_KEY`，优先走 Gemini API；否则回退到已登录的 Gemini CLI。
 - `kimi`：Moonshot API。
 - `deepseek`：DeepSeek API。
 - `xiaomi_mimo`：小米 MiMo API。
@@ -98,7 +97,7 @@ sudo apt-get install poppler-utils
 创建本地密钥文件：
 
 ```bash
-cp v2/.env.example v2/.env
+cp surveyforge/.env.example surveyforge/.env
 ```
 
 只填写你实际使用的 key：
@@ -114,8 +113,8 @@ OPENAI_API_KEY=...
 测试 provider：
 
 ```bash
-python3 v2/cli.py providers
-python3 v2/cli.py providers --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo
+python3 surveyforge/cli.py providers
+python3 surveyforge/cli.py providers --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo
 ```
 
 <span style="color:#0969da"><b>人工干预节点 A：Provider 可用性确认。</b></span>如果某个 provider 不可用，`stage1`、`stage2`、`summarize`、`all` 会暂停运行，并提示你重新选择可用 provider。
@@ -125,8 +124,8 @@ python3 v2/cli.py providers --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo
 Stage 1 目标是生成精选文献列表：
 
 ```text
-v2/temp/stage1/step3/selected_papers.jsonl
-v2/temp/stage1/step3/selected_papers.md
+surveyforge/temp/stage1/step3/selected_papers.jsonl
+surveyforge/temp/stage1/step3/selected_papers.md
 ```
 
 流程：
@@ -147,30 +146,30 @@ v2/temp/stage1/step3/selected_papers.md
 一键运行 Stage 1：
 
 ```bash
-python3 v2/cli.py stage1 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20
+python3 surveyforge/cli.py stage1 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20
 ```
 
 分步运行：
 
 ```bash
-python3 v2/cli.py plan --provider chatgpt
-python3 v2/cli.py retrieve --mode browser
-python3 v2/cli.py enrich
-python3 v2/cli.py prefilter
-python3 v2/cli.py screen --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --batch-size 20
-python3 v2/cli.py download
+python3 surveyforge/cli.py plan --provider chatgpt
+python3 surveyforge/cli.py retrieve --mode browser
+python3 surveyforge/cli.py enrich
+python3 surveyforge/cli.py prefilter
+python3 surveyforge/cli.py screen --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --batch-size 20
+python3 surveyforge/cli.py download
 ```
 
 关键输出：
 
 ```text
-v2/temp/stage1/step1/planning.json
-v2/temp/stage1/step2/candidate_pool_raw.jsonl
-v2/temp/stage1/step2/candidate_pool_enriched.jsonl
-v2/temp/stage1/step2/candidate_pool_pre_filtered.jsonl
-v2/temp/stage1/step3/title_clusters.json
-v2/temp/stage1/step3/selected_papers.jsonl
-v2/temp/stage1/step4/manual_download_queue.md
+surveyforge/temp/stage1/step1/planning.json
+surveyforge/temp/stage1/step2/candidate_pool_raw.jsonl
+surveyforge/temp/stage1/step2/candidate_pool_enriched.jsonl
+surveyforge/temp/stage1/step2/candidate_pool_pre_filtered.jsonl
+surveyforge/temp/stage1/step3/title_clusters.json
+surveyforge/temp/stage1/step3/selected_papers.jsonl
+surveyforge/temp/stage1/step4/manual_download_queue.md
 ```
 
 ### Stage 1 中需要人工关注的节点
@@ -180,7 +179,7 @@ v2/temp/stage1/step4/manual_download_queue.md
 Google Scholar 可能出现验证码、429、镜像跳转或空结果。推荐使用：
 
 ```bash
-python3 v2/cli.py retrieve --mode browser
+python3 surveyforge/cli.py retrieve --mode browser
 ```
 
 浏览器模式会给你处理验证码、登录或镜像跳转的机会。处理完成后再继续自动翻页抓取标题列表。
@@ -190,9 +189,9 @@ python3 v2/cli.py retrieve --mode browser
 建议检查：
 
 ```text
-v2/temp/stage1/step2/candidate_pool_raw.md
-v2/temp/stage1/step2/candidate_pool_enriched.md
-v2/temp/stage1/step2/candidate_pool_pre_filtered.md
+surveyforge/temp/stage1/step2/candidate_pool_raw.md
+surveyforge/temp/stage1/step2/candidate_pool_enriched.md
+surveyforge/temp/stage1/step2/candidate_pool_pre_filtered.md
 ```
 
 OpenAlex 会优先补全 DOI、期刊、年份、作者、摘要、引用量；Crossref 作为 fallback。如果两个数据源都找不到，该文献会被丢弃。
@@ -208,14 +207,14 @@ PDF 下载是最需要人工确认的环节：
 手动下载清单：
 
 ```text
-v2/temp/stage1/step4/manual_download_queue.md
-v2/temp/stage1/step4/manual_download_queue.jsonl
+surveyforge/temp/stage1/step4/manual_download_queue.md
+surveyforge/temp/stage1/step4/manual_download_queue.jsonl
 ```
 
 手动下载 PDF 后，请放到：
 
 ```text
-v2/papers/manual/
+surveyforge/papers/manual/
 ```
 
 <span style="color:#2da44e"><b>重要：不是所有文献都必须下载 PDF。</b></span>
@@ -262,19 +261,19 @@ selected_papers
 运行 Stage 2：
 
 ```bash
-python3 v2/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3
+python3 surveyforge/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3
 ```
 
 小批量测试，每个类别只读 1 篇：
 
 ```bash
-python3 v2/cli.py stage2 --provider deepseek --providers deepseek,kimi,xiaomi_mimo --max-workers 3 --papers-per-category 1
+python3 surveyforge/cli.py stage2 --provider deepseek --providers deepseek,kimi,xiaomi_mimo --max-workers 3 --papers-per-category 1
 ```
 
 增强指标阅读：
 
 ```bash
-python3 v2/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3 --enhanced-metrics
+python3 surveyforge/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3 --enhanced-metrics
 ```
 
 `--enhanced-metrics` 会先按图题/表题相关性筛选图表，只保留实验、结果、误差、精度、轨迹、环境、传感器等相关图表附近文本，并加入 RMSE、mean error、P90、CDF、accuracy 等指标窗口。
@@ -294,35 +293,35 @@ python3 v2/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deep
 只重跑类别总结和全局总结，不重新阅读 PDF：
 
 ```bash
-python3 v2/cli.py summarize --provider deepseek --providers deepseek,kimi,xiaomi_mimo
+python3 surveyforge/cli.py summarize --provider deepseek --providers deepseek,kimi,xiaomi_mimo
 ```
 
 该命令读取已有：
 
 ```text
-v2/temp/stage2/<category_id>/paper_review_cards.jsonl
-v2/temp/stage2/<category_id>/category_reading_cards_compact.json
+surveyforge/temp/stage2/<category_id>/paper_review_cards.jsonl
+surveyforge/temp/stage2/<category_id>/category_reading_cards_compact.json
 ```
 
 然后重新生成：
 
 ```text
-v2/temp/stage2/<category_id>/category_summary.json
-v2/final/stage2/category_summaries.json
-v2/final/stage2/global_summary.json
-v2/final/stage2/survey_review.json
+surveyforge/temp/stage2/<category_id>/category_summary.json
+surveyforge/final/stage2/category_summaries.json
+surveyforge/final/stage2/global_summary.json
+surveyforge/final/stage2/survey_review.json
 ```
 
 ## 7. 全流程运行
 
 ```bash
-python3 v2/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3
+python3 surveyforge/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3
 ```
 
 开启增强指标阅读：
 
 ```bash
-python3 v2/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3 --enhanced-metrics
+python3 surveyforge/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3 --enhanced-metrics
 ```
 
 ## 8. 清理输出
@@ -330,13 +329,13 @@ python3 v2/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepsee
 只清理 `temp` 和 `final`：
 
 ```bash
-python3 v2/cli.py clean
+python3 surveyforge/cli.py clean
 ```
 
 同时删除 PDF：
 
 ```bash
-python3 v2/cli.py clean --include-papers
+python3 surveyforge/cli.py clean --include-papers
 ```
 
 ## 9. 输出文件
@@ -344,7 +343,7 @@ python3 v2/cli.py clean --include-papers
 最终结果位于：
 
 ```text
-v2/final/stage2/
+surveyforge/final/stage2/
 ```
 
 主要文件：

@@ -22,9 +22,6 @@ Current release: `SurveyForge v1.0`.
 
 当前发行版本是 `SurveyForge v1.0`。
 
-Note: the executable source code currently lives under `v2/` because this was the development directory used before the 1.0 release. In this repository, `v2/` is a code directory name, not the release version number.
-
-说明：当前可执行源码仍位于 `v2/` 目录，这是 1.0 发布前的开发目录名。在本仓库中，`v2/` 只是代码目录路径，不代表发行版本号。
 
 ## Repository Layout / 仓库结构
 
@@ -33,7 +30,7 @@ Note: the executable source code currently lives under `v2/` because this was th
 ├── README.md
 ├── requirements.txt
 ├── LICENSE
-└── v2/
+└── surveyforge/
     ├── cli.py
     ├── .env.example
     ├── configs/
@@ -58,10 +55,10 @@ Note: the executable source code currently lives under `v2/` because this was th
 Generated outputs are intentionally ignored by Git:
 
 ```text
-v2/temp/      intermediate artifacts
-v2/final/     final reports and tables
-v2/papers/    downloaded or manually collected PDFs
-v2/.env       local API keys
+surveyforge/temp/      intermediate artifacts
+surveyforge/final/     final reports and tables
+surveyforge/papers/    downloaded or manually collected PDFs
+surveyforge/.env       local API keys
 ```
 
 ## Installation / 安装
@@ -83,8 +80,8 @@ sudo apt-get install poppler-utils
 
 Supported providers:
 
-- `chatgpt`: smart provider. Uses OpenAI API if `OPENAI_API_KEY` exists in `v2/.env`; otherwise falls back to logged-in Codex CLI.
-- `gemini`: smart provider. Uses Gemini API if `GEMINI_API_KEY` exists in `v2/.env`; otherwise falls back to logged-in Gemini CLI.
+- `chatgpt`: smart provider. Uses OpenAI API if `OPENAI_API_KEY` exists in `surveyforge/.env`; otherwise falls back to logged-in Codex CLI.
+- `gemini`: smart provider. Uses Gemini API if `GEMINI_API_KEY` exists in `surveyforge/.env`; otherwise falls back to logged-in Gemini CLI.
 - `kimi`: Moonshot API.
 - `deepseek`: DeepSeek API.
 - `xiaomi_mimo`: Xiaomi MiMo API.
@@ -102,7 +99,7 @@ Default models:
 Create local credentials:
 
 ```bash
-cp v2/.env.example v2/.env
+cp surveyforge/.env.example surveyforge/.env
 ```
 
 Fill only the keys you use:
@@ -118,8 +115,8 @@ OPENAI_API_KEY=...
 Provider health check:
 
 ```bash
-python3 v2/cli.py providers
-python3 v2/cli.py providers --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo
+python3 surveyforge/cli.py providers
+python3 surveyforge/cli.py providers --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo
 ```
 
 ## Stage 1: Paper Selection / 第一阶段：文献挑选
@@ -146,36 +143,36 @@ Natural-language topic
 Run all Stage 1 steps:
 
 ```bash
-python3 v2/cli.py stage1 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20
+python3 surveyforge/cli.py stage1 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20
 ```
 
 Run step by step:
 
 ```bash
-python3 v2/cli.py plan --provider chatgpt
-python3 v2/cli.py retrieve --mode browser
-python3 v2/cli.py enrich
-python3 v2/cli.py prefilter
-python3 v2/cli.py screen --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --batch-size 20
-python3 v2/cli.py download
+python3 surveyforge/cli.py plan --provider chatgpt
+python3 surveyforge/cli.py retrieve --mode browser
+python3 surveyforge/cli.py enrich
+python3 surveyforge/cli.py prefilter
+python3 surveyforge/cli.py screen --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --batch-size 20
+python3 surveyforge/cli.py download
 ```
 
 Important outputs:
 
 ```text
-v2/temp/stage1/step1/planning.json
-v2/temp/stage1/step2/candidate_pool_raw.jsonl
-v2/temp/stage1/step2/candidate_pool_enriched.jsonl
-v2/temp/stage1/step2/candidate_pool_pre_filtered.jsonl
-v2/temp/stage1/step3/title_clusters.json
-v2/temp/stage1/step3/selected_papers.jsonl
-v2/temp/stage1/step4/manual_download_queue.md
+surveyforge/temp/stage1/step1/planning.json
+surveyforge/temp/stage1/step2/candidate_pool_raw.jsonl
+surveyforge/temp/stage1/step2/candidate_pool_enriched.jsonl
+surveyforge/temp/stage1/step2/candidate_pool_pre_filtered.jsonl
+surveyforge/temp/stage1/step3/title_clusters.json
+surveyforge/temp/stage1/step3/selected_papers.jsonl
+surveyforge/temp/stage1/step4/manual_download_queue.md
 ```
 
 Manual PDFs should be placed under:
 
 ```text
-v2/papers/manual/
+surveyforge/papers/manual/
 ```
 
 ## Stage 2: Deep Reading and Survey Report / 第二阶段：深度阅读与综述报告
@@ -202,19 +199,19 @@ selected_papers
 Run Stage 2:
 
 ```bash
-python3 v2/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3
+python3 surveyforge/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3
 ```
 
 Small test, one paper per category:
 
 ```bash
-python3 v2/cli.py stage2 --provider deepseek --providers deepseek,kimi,xiaomi_mimo --max-workers 3 --papers-per-category 1
+python3 surveyforge/cli.py stage2 --provider deepseek --providers deepseek,kimi,xiaomi_mimo --max-workers 3 --papers-per-category 1
 ```
 
 Enhanced metric extraction:
 
 ```bash
-python3 v2/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3 --enhanced-metrics
+python3 surveyforge/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --max-workers 3 --enhanced-metrics
 ```
 
 `--enhanced-metrics` selects only relevant figure/table captions and nearby text. It focuses on experiment, result, accuracy, error, trajectory, environment, sensor, RMSE, mean error, P90, CDF, and related metric windows. It does not perform image OCR.
@@ -222,33 +219,33 @@ python3 v2/cli.py stage2 --provider chatgpt --providers chatgpt,gemini,kimi,deep
 Rerun only category and global summaries without reading PDFs again:
 
 ```bash
-python3 v2/cli.py summarize --provider deepseek --providers deepseek,kimi,xiaomi_mimo
+python3 surveyforge/cli.py summarize --provider deepseek --providers deepseek,kimi,xiaomi_mimo
 ```
 
 Important outputs:
 
 ```text
-v2/temp/stage2/<category_id>/paper_review_cards.jsonl
-v2/temp/stage2/<category_id>/category_reading_cards_compact.json
-v2/temp/stage2/<category_id>/category_summary.json
+surveyforge/temp/stage2/<category_id>/paper_review_cards.jsonl
+surveyforge/temp/stage2/<category_id>/category_reading_cards_compact.json
+surveyforge/temp/stage2/<category_id>/category_summary.json
 
-v2/final/stage2/paper_review_cards.jsonl
-v2/final/stage2/category_summaries.json
-v2/final/stage2/global_summary.json
-v2/final/stage2/survey_table.csv
-v2/final/stage2/survey_review.json
+surveyforge/final/stage2/paper_review_cards.jsonl
+surveyforge/final/stage2/category_summaries.json
+surveyforge/final/stage2/global_summary.json
+surveyforge/final/stage2/survey_table.csv
+surveyforge/final/stage2/survey_review.json
 ```
 
 ## Full Pipeline / 全流程运行
 
 ```bash
-python3 v2/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3
+python3 surveyforge/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3
 ```
 
 With enhanced metric extraction:
 
 ```bash
-python3 v2/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3 --enhanced-metrics
+python3 surveyforge/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepseek,xiaomi_mimo --retrieve-mode browser --batch-size 20 --max-workers 3 --enhanced-metrics
 ```
 
 `stage1`, `stage2`, `summarize`, and `all` run provider preflight checks. If any requested provider is unavailable, the command stops and prints available providers.
@@ -258,20 +255,20 @@ python3 v2/cli.py all --provider chatgpt --providers chatgpt,gemini,kimi,deepsee
 Clean generated temp and final outputs:
 
 ```bash
-python3 v2/cli.py clean
+python3 surveyforge/cli.py clean
 ```
 
 Also remove PDFs:
 
 ```bash
-python3 v2/cli.py clean --include-papers
+python3 surveyforge/cli.py clean --include-papers
 ```
 
 ## Notes and Limitations / 注意事项
 
 - Google Scholar may block automated requests. Browser-assisted mode is recommended when verification or mirror navigation is needed.
 - OpenAlex is used first for metadata enrichment, Crossref is used as fallback. Papers not found in either source are discarded.
-- Publisher PDFs should be downloaded only through legal access paths. For subscription-only papers, use the manual queue and place files under `v2/papers/manual/`.
+- Publisher PDFs should be downloaded only through legal access paths. For subscription-only papers, use the manual queue and place files under `surveyforge/papers/manual/`.
 - Stage 2 PDF reading depends on extractable text. Scanned figures without embedded text may require manual checking.
 - LLM outputs should be reviewed before being used in a formal publication.
 

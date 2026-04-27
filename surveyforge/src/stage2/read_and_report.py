@@ -915,7 +915,7 @@ def run_summarize_only(args: argparse.Namespace) -> None:
     final_dir = stage_final("stage2")
     category_results = load_existing_category_results()
     if not category_results:
-        raise RuntimeError("No existing Stage2 category reading cards found under v2/temp/stage2/*/paper_review_cards.jsonl.")
+        raise RuntimeError("No existing Stage2 category reading cards found under surveyforge/temp/stage2/*/paper_review_cards.jsonl.")
 
     log("=" * 72)
     log("Stage2: summarize-only")

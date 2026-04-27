@@ -9,7 +9,7 @@ PROJECT_ROOT = ROOT.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from v2.src.core.llm_client import check_provider
+from surveyforge.src.core.llm_client import check_provider
 
 
 DEFAULT_PROVIDER_LIST = "chatgpt,gemini,kimi,deepseek,xiaomi_mimo"
@@ -58,13 +58,13 @@ def preflight_providers(provider: str = "", providers: str = ""):
         if available:
             print(f"  --provider {available[0]} --providers {','.join(available)}")
         else:
-            print("  python3 v2/cli.py providers")
+            print("  python3 surveyforge/cli.py providers")
         raise SystemExit(2)
     return available
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Survey Agent V2")
+    parser = argparse.ArgumentParser(description="SurveyForge")
     subparsers = parser.add_subparsers(dest="command")
 
     plan = subparsers.add_parser("plan", help="Stage1 Step1: interactive planning.")
@@ -97,8 +97,8 @@ def main():
     download.add_argument("--headless", action="store_true")
     download.add_argument("--browser", default="chrome")
 
-    clean = subparsers.add_parser("clean", help="Clean generated V2 temp/final files for a fresh topic run.")
-    clean.add_argument("--include-papers", action="store_true", help="Also remove downloaded PDFs under v2/papers.")
+    clean = subparsers.add_parser("clean", help="Clean generated SurveyForge temp/final files for a fresh topic run.")
+    clean.add_argument("--include-papers", action="store_true", help="Also remove downloaded PDFs under surveyforge/papers.")
 
     providers_cmd = subparsers.add_parser("providers", help="Check LLM provider availability.")
     providers_cmd.add_argument("--providers", default=DEFAULT_PROVIDER_LIST)
@@ -163,7 +163,7 @@ def main():
             extra.append("--no-interactive")
         if args.input:
             extra.extend(["--input", args.input])
-        run_module("v2.src.stage1.step1_planner", extra)
+        run_module("surveyforge.src.stage1.step1_planner", extra)
         return
     if args.command == "retrieve":
         extra = []
@@ -173,7 +173,7 @@ def main():
         extra.extend(["--mode", args.mode])
         if args.browser_start_url:
             extra.extend(["--browser-start-url", args.browser_start_url])
-        run_module("v2.src.stage1.step2_retrieve", extra)
+        run_module("surveyforge.src.stage1.step2_retrieve", extra)
         return
     if args.command == "prefilter":
         extra = []
@@ -181,13 +181,13 @@ def main():
             extra.extend(["--planning", args.planning])
         if args.candidates:
             extra.extend(["--candidates", args.candidates])
-        run_module("v2.src.stage1.step2_prefilter", extra)
+        run_module("surveyforge.src.stage1.step2_prefilter", extra)
         return
     if args.command == "enrich":
         extra = []
         if args.candidates:
             extra.extend(["--candidates", args.candidates])
-        run_module("v2.src.stage1.step2_enrich", extra)
+        run_module("surveyforge.src.stage1.step2_enrich", extra)
         return
     if args.command == "screen":
         extra = []
@@ -200,7 +200,7 @@ def main():
         if args.candidates:
             extra.extend(["--candidates", args.candidates])
         extra.extend(["--batch-size", str(args.batch_size)])
-        run_module("v2.src.stage1.step3_screen", extra)
+        run_module("surveyforge.src.stage1.step3_screen", extra)
         return
     if args.command == "download":
         extra = []
@@ -210,19 +210,19 @@ def main():
             extra.append("--headless")
         if args.browser:
             extra.extend(["--browser", args.browser])
-        run_module("v2.src.stage1.step4_download", extra)
+        run_module("surveyforge.src.stage1.step4_download", extra)
         return
     if args.command == "clean":
         extra = []
         if args.include_papers:
             extra.append("--include-papers")
-        run_module("v2.src.tools.clean_outputs", extra)
+        run_module("surveyforge.src.tools.clean_outputs", extra)
         return
     if args.command == "providers":
         extra = ["--providers", args.providers, "--timeout", str(args.timeout)]
         if args.json:
             extra.append("--json")
-        run_module("v2.src.tools.check_providers", extra)
+        run_module("surveyforge.src.tools.check_providers", extra)
         return
     if args.command in {"read", "stage2"}:
         if args.command == "stage2":
@@ -240,7 +240,7 @@ def main():
             extra.append("--enhanced-metrics")
         extra.extend(["--max-workers", str(args.max_workers)])
         extra.extend(["--papers-per-category", str(args.papers_per_category)])
-        run_module("v2.src.stage2.read_and_report", extra)
+        run_module("surveyforge.src.stage2.read_and_report", extra)
         return
     if args.command == "summarize":
         preflight_providers(args.provider, args.providers)
@@ -251,7 +251,7 @@ def main():
             extra.extend(["--providers", args.providers])
         if args.planning:
             extra.extend(["--planning", args.planning])
-        run_module("v2.src.stage2.read_and_report", extra)
+        run_module("surveyforge.src.stage2.read_and_report", extra)
         return
     if args.command == "stage1":
         preflight_providers(args.provider, args.providers)
@@ -262,23 +262,23 @@ def main():
             plan_args.append("--no-interactive")
         if args.input:
             plan_args.extend(["--input", args.input])
-        run_module("v2.src.stage1.step1_planner", plan_args)
+        run_module("surveyforge.src.stage1.step1_planner", plan_args)
         retrieve_args = ["--delay", str(args.delay), "--mode", args.retrieve_mode]
         if args.browser_start_url:
             retrieve_args.extend(["--browser-start-url", args.browser_start_url])
-        run_module("v2.src.stage1.step2_retrieve", retrieve_args)
-        run_module("v2.src.stage1.step2_enrich")
-        run_module("v2.src.stage1.step2_prefilter")
+        run_module("surveyforge.src.stage1.step2_retrieve", retrieve_args)
+        run_module("surveyforge.src.stage1.step2_enrich")
+        run_module("surveyforge.src.stage1.step2_prefilter")
         screen_args = ["--batch-size", str(args.batch_size)]
         if args.provider:
             screen_args.extend(["--provider", args.provider])
         if args.providers:
             screen_args.extend(["--providers", args.providers])
-        run_module("v2.src.stage1.step3_screen", screen_args)
+        run_module("surveyforge.src.stage1.step3_screen", screen_args)
         download_args = ["--browser", args.download_browser]
         if args.download_headless:
             download_args.append("--headless")
-        run_module("v2.src.stage1.step4_download", download_args)
+        run_module("surveyforge.src.stage1.step4_download", download_args)
         return
     if args.command == "all":
         preflight_providers(args.provider, args.providers)
@@ -289,23 +289,23 @@ def main():
             plan_args.append("--no-interactive")
         if args.input:
             plan_args.extend(["--input", args.input])
-        run_module("v2.src.stage1.step1_planner", plan_args)
+        run_module("surveyforge.src.stage1.step1_planner", plan_args)
         retrieve_args = ["--delay", str(args.delay), "--mode", args.retrieve_mode]
         if args.browser_start_url:
             retrieve_args.extend(["--browser-start-url", args.browser_start_url])
-        run_module("v2.src.stage1.step2_retrieve", retrieve_args)
-        run_module("v2.src.stage1.step2_enrich")
-        run_module("v2.src.stage1.step2_prefilter")
+        run_module("surveyforge.src.stage1.step2_retrieve", retrieve_args)
+        run_module("surveyforge.src.stage1.step2_enrich")
+        run_module("surveyforge.src.stage1.step2_prefilter")
         screen_args = ["--batch-size", str(args.batch_size)]
         if args.provider:
             screen_args.extend(["--provider", args.provider])
         if args.providers:
             screen_args.extend(["--providers", args.providers])
-        run_module("v2.src.stage1.step3_screen", screen_args)
+        run_module("surveyforge.src.stage1.step3_screen", screen_args)
         download_args = ["--browser", args.download_browser]
         if args.download_headless:
             download_args.append("--headless")
-        run_module("v2.src.stage1.step4_download", download_args)
+        run_module("surveyforge.src.stage1.step4_download", download_args)
         read_args = []
         if args.provider:
             read_args.extend(["--provider", args.provider])
@@ -317,7 +317,7 @@ def main():
             read_args.append("--enhanced-metrics")
         read_args.extend(["--max-workers", str(args.max_workers)])
         read_args.extend(["--papers-per-category", str(args.papers_per_category)])
-        run_module("v2.src.stage2.read_and_report", read_args)
+        run_module("surveyforge.src.stage2.read_and_report", read_args)
         return
     parser.print_help()
 
