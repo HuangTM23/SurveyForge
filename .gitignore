@@ -1,0 +1,39 @@
+# SurveyForge release repository
+#
+# This repository publishes the V2 implementation as the formal 1.0 version.
+# Legacy root-level V1/debug files are intentionally ignored.
+
+*
+
+!.gitignore
+!README.md
+!LICENSE
+!requirements.txt
+!.env.example
+
+!v2/
+!v2/**
+
+# Secrets
+.env
+v2/.env
+
+# Runtime outputs
+data/
+logs/
+temp/
+final/
+papers/
+v2/temp/
+v2/final/
+v2/papers/
+
+# Python caches
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Local/IDE files
+.DS_Store
+.idea/
+.vscode/

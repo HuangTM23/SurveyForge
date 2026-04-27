@@ -1,0 +1,36 @@
+topic: ""
+year_range:
+  from: 2022
+  to: 2026
+gs_max_results: 100
+gs_min_results_per_query: 30
+target_keep_count: 30
+venue_scope:
+  - "Preferred: IEEE Transactions"
+  - "Preferred: IEEE Internet of Things Journal"
+  - "Preferred: Elsevier journals"
+  - "Preferred: MDPI Sensors only if citation_count > 100"
+  - "Preferred: ACM journals"
+  - "Blocked: IEEE Access"
+  - "Blocked: arXiv"
+  - "Blocked: SSRN"
+  - "Blocked: medRxiv"
+  - "Blocked: bioRxiv"
+  - "Blocked: TechRxiv"
+  - "Blocked: preprint platforms"
+topic_scope:
+  - "Preferred target term: uwb"
+  - "Blocked topic: wifi"
+  - "Blocked topic: bluetooth"
+  - "Blocked topic: 5G"
+  - "Blocked topic: GNSS"
+  - "Blocked topic: GPS"
+  - "Blocked topic: Beidou"
+  - "Blocked topic: survey"
+  - "Blocked topic: trend"
+  - "Blocked topic: future"
+title_exclude_terms:
+  - survey
+  - review
+  - trend
+provider: "chatgpt"

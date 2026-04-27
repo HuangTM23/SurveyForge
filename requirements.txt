@@ -1,0 +1,5 @@
+beautifulsoup4>=4.12
+browser-cookie3>=0.19
+playwright>=1.40
+PyYAML>=6.0
+requests>=2.31

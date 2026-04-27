@@ -1,0 +1,9 @@
+llm:
+  provider: "chatgpt"
+  base_url: ""
+  api_key_env: ""
+  model: ""
+  temperature: 0.1
+  timeout_seconds: 120
+  max_retries: 3
+  retry_base_delay_seconds: 2.0
